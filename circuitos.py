@@ -1,4 +1,13 @@
 import math
+
+def calculaFP(r, i):
+
+        num = i / r
+        angle = (-1) * math.atan(num)
+        fp = math.cos(angle)
+        return fp
+
+
 #valores de resistores do laboratório
 lista_resistores = [1, 4.7, 10, 18, 22, 33, 68, 100, 150, 220, 270, 390, 470, 560, 680, 820]
 #valores de indutores do laboratório
@@ -15,34 +24,24 @@ for xx in range(0,len(lista_indutores)):
     res = w * lista_indutores[xx]
     complexo = complex(str(res) + "j")
     impedancia_indutores.append(complexo)
-    print(complexo)
 #calculando impedância dos capacitores
 for xx in range(0,len(lista_capacitores)):
     res = 1 / (w * lista_capacitores[xx])
     complexo = complex("-" +str(res) + "j")
     impedancia_capacitores.append(complexo)
-    print(complexo)
 #definindo tensão
 tensao = complex(5)
 corrente = complex(0)
-count = 0
 
 for x in range(0,len(lista_resistores)):
     for y in range(0, len(impedancia_indutores)):
         for z in range(0, len(impedancia_capacitores)):
-            corrente = tensao/(complex(lista_resistores[x])+ impedancia_indutores[y] + impedancia_capacitores[z])
-            lista_resultados.append(corrente)
-            count = count + 1
-            if(count == 100):
-                print(lista_resistores[x], impedancia_indutores[y], impedancia_capacitores[z])
-print ("Número de combinações ", count)
-for zz in range(0, len(lista_resultados)):
-    angle =(-1) * math.atan2(lista_resultados[zz].imag, lista_resultados[zz].real)
-    fp = math.cos(angle)
-    if fp <= 0.8:
-        print("Encontrado na posição ",zz)
+            corrente = tensao/(lista_resistores[x]+ impedancia_indutores[y] + impedancia_capacitores[z])
 
-print(lista_resultados)
+            fp = calculaFP(corrente.real, corrente.imag)
+            if(fp < 0.8):
+                print("Resistor = ", lista_resistores[x], "Indutor = ", impedancia_indutores[y], "Capacitor = ", impedancia_capacitores[z], "Corrente =", corrente, "Fator de Potência = ", fp)
+
 
 
 
